@@ -1,0 +1,58 @@
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    branches: [ main ]
+
+name: Frontend
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.SECRET_KEY }}
+        aws-region: eu-west-2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    
+    - name: Build, tag, and push the web image to Amazon ECR
+      id: build-web
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ secrets.REPO_NAME }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        # Build a docker container and push it to ECR
+        DOCKER_BUILDKIT=1 docker build -f ./webapp/web.Dockerfile -t $ECR_REGISTRY/changachanga-web:latest ./webapp 
+        echo "Pushing image to ECR..."
+        docker push $ECR_REGISTRY/changachanga-web:latest
+
+    - name: Run Deployment Action
+      uses: appleboy/ssh-action@master
+      with:
+        host: 35.176.163.32
+        username: ubuntu
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          echo 'Starting to Deploy...'
+          # shellcheck disable=SC2164
+          pushd /opt/app
+          aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 796451236198.dkr.ecr.eu-west-2.amazonaws.com
+          docker image prune -f
+          docker compose stop web
+          docker compose pull web
+          docker compose up -d web
+          echo 'Deployment completed successfully'
+          popd

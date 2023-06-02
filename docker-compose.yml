@@ -1,0 +1,72 @@
+version: '3.8'
+
+# Defining the named volume
+volumes:
+    postgres_data:
+    redis_data:
+
+services:
+    redis:
+        image: redis:latest
+        container_name: redis
+        ports:
+          - "6379:6379"
+        volumes:
+            -   redis_data:/data
+
+    postgres:
+        image: 'postgres:latest'
+        restart: 'always'
+        container_name: postgres
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PW}
+            POSTGRES_DB: ${POSTGRES_DB}
+        volumes:
+            # Mounting the named volume
+            - 'postgres_data:/var/lib/postgresql/data/'
+        ports:
+            - '5432:5432'
+    pgadmin:
+        container_name: pgadmin
+        image: dpage/pgadmin4:latest
+        environment:
+            - PGADMIN_DEFAULT_EMAIL=${PGADMIN_MAIL}
+            - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PW}
+        ports:
+            - "5050:80"
+        restart: always
+
+    metabase:
+      container_name: metabase
+      image: metabase/metabase:latest
+      environment:
+        - MB_DB_TYPE=postgres
+        - MB_DB_DBNAME=metabase
+        - MB_DB_PORT=5432
+        - MB_DB_USER=${POSTGRES_USER}
+        - MB_DB_PASS=${POSTGRES_PW}
+        - MB_DB_HOST=postgres
+      ports:
+        - "3000:3000"
+
+    queue:
+      image: rabbitmq:3
+      # Using the below image instead is required to enable the "Broker" tab in the flower UI:
+      # image: rabbitmq:3-management
+      #
+      # You also have to change the flower command
+      ports:
+        - "5672:5672"
+
+    flower:
+      image: mher/flower
+      networks:
+        - default
+      env_file:
+        - .env
+      command:
+        - "--broker=amqp://guest@queue:5672//"
+        # For the "Broker" tab to work in the flower UI, uncomment the following command argument,
+        # and change the queue service's image as well
+        # - "--broker_api=http://guest:guest@queue:15672/api//"

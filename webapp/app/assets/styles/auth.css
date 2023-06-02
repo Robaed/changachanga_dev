@@ -1,0 +1,30 @@
+/* Importing inter font from google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-image: url("~/assets/images/bg_main.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+nav {
+    box-shadow: 0 4px 8px 0 rgba(77, 74, 74, 0.2), 0 6px 5px 0 rgba(105, 100, 100, 0.1);
+}
+
+nav.main-footer-nav {
+    background-color: #1D1D1B;
+    ;
+}
+
+input[type="text"], input[type="tel"], input[type="email"], input[type="password"]  {
+    font-size: 12px!important;
+    background-color: #F6F6F6;
+    padding-left: 16px;
+}
+
+.text-\[\#444444\] {
+    font-size: 12px!important;
+    font-weight: 600;
+}

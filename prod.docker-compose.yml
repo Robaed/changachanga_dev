@@ -1,0 +1,139 @@
+version: '3.8'
+
+# Defining the named volume
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379"
+    volumes:
+      - /data/redis_data:/data
+
+  postgres:
+    image: 'postgres:14'
+    restart: 'always'
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PW}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      # Mounting the named volume
+      - '/data/postgres_data:/var/lib/postgresql/data/'
+    ports:
+      - '5432:5432'
+
+  traefik:
+    image: "traefik:v2.10"
+    container_name: "traefik"
+    environment:
+      - AZURE_CLIENT_ID=${DNS_RESOLVER_AZURE_CLIENT_ID}
+      - AZURE_CLIENT_SECRET=${DNS_RESOLVER_AZURE_CLIENT_SECRET}
+      - AZURE_ENVIRONMENT=public
+      - AZURE_RESOURCE_GROUP=${DNS_RESOLVER_AZURE_RESOURCE_GROUP}
+      - AZURE_SUBSCRIPTION_ID=${DNS_RESOLVER_AZURE_SUBSCRIPTION_ID}
+      - AZURE_TENANT_ID=${DNS_RESOLVER_AZURE_TENANT_ID}
+    command:
+      - "--log.level=ERROR"
+      - "--api.insecure=false"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.azureresolver.acme.dnschallenge=true"
+      - "--certificatesresolvers.azureresolver.acme.dnschallenge.provider=azure"
+      - "--certificatesresolvers.azureresolver.acme.email=postmaster@fokas.io"
+      - "--certificatesresolvers.azureresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "443:443"
+      - "8080:8080"
+      - "80:80"
+    volumes:
+      - "/tmp/letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  api:
+    image: 796451236198.dkr.ecr.eu-west-2.amazonaws.com/changachanga-api:latest
+    pull_policy: always
+    container_name: backend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`api.changa.fokas.io`)"
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.tls.certresolver=azureresolver"
+      - "traefik.http.services.api.loadbalancer.server.port=80"
+    env_file:
+      - .api.env
+    environment:
+      - PORT=80
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PW}
+      - POSTGRES_SERVER=${POSTGRES_HOST}
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=${POSTGRES_DB}
+      - LOGGING_LEVEL=10
+    restart: "no"
+    depends_on:
+      - redis
+      - postgres
+
+  web:
+    container_name: web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web.rule=Host(`web.changa.fokas.io`)"
+      - "traefik.http.routers.web.entrypoints=websecure"
+      - "traefik.http.routers.web.tls.certresolver=azureresolver"
+      - "traefik.http.services.web.loadbalancer.server.port=80"
+    image: 796451236198.dkr.ecr.eu-west-2.amazonaws.com/changachanga-web:latest
+    restart: unless-stopped
+    env_file: .web.env
+    depends_on:
+      - api
+    ports:
+      - 80
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pgadmin.rule=Host(`data.changa.fokas.io`)"
+      - "traefik.http.routers.pgadmin.entrypoints=websecure"
+      - "traefik.http.routers.pgadmin.tls.certresolver=azureresolver"
+    volumes:
+      - "/data/pgadmin:/var/lib/pgadmin"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_MAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PW}
+    ports:
+      - "5050"
+    restart: always
+    depends_on:
+      - postgres
+
+  metabase:
+    container_name: metabase
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.metabase.rule=Host(`analytics.changa.fokas.io`)"
+      - "traefik.http.routers.metabase.entrypoints=websecure"
+      - "traefik.http.routers.metabase.tls.certresolver=azureresolver"
+    image: metabase/metabase:latest
+    environment:
+      - MB_DB_TYPE=postgres
+      - MB_DB_DBNAME=postgres
+      - MB_DB_PORT=5432
+      - MB_DB_USER=${POSTGRES_USER}
+      - MB_DB_PASS=${POSTGRES_PW}
+      - MB_DB_HOST=${POSTGRES_HOST}
+    ports:
+      - "3000"
+    depends_on:
+      - postgres
+
