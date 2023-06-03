@@ -7,6 +7,8 @@ import qs from 'qs'
 
 import { AuthLayout } from "~/components/layouts";
 
+import DatePicker from 'react-date-picker';
+
 import countryList from 'react-select-country-list';
 // import { useSpinDelay } from 'spin-delay'
 import clsx from 'clsx'
@@ -59,7 +61,7 @@ type ActionData = {
     };
 };
 
-export default function Example() {
+export default function AccountVerification() {
 //   const transition = useTransition()
 //   const showSpinner = useSpinDelay(transition.state !== 'idle', {
 //     delay: 200,
@@ -72,11 +74,18 @@ export default function Example() {
   const actionData = useActionData<ActionData>();
 
   const [value, setValue] = useState('')
+  const [dateValue, onDateChange] = useState(new Date());
 
   const changeHandler = value => {
     setValue(value)
   }
   const options = useMemo(() => countryList().getData(), [])
+
+  const gender_options = [
+    { value: 'male', label: 'Male' },
+    { value: 'female', label: 'Female' }
+  ]
+
 
   return (
     <AuthLayout title=''>
@@ -168,8 +177,11 @@ export default function Example() {
                             >   
                             </TextInput>
                         </div>
-
                         
+                        {/* <DatePicker onChange={onDateChange} value={dateValue} /> */}
+
+                        <Select label='Gender' options={gender_options}/>
+
 
 
                     </Form>

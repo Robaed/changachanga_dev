@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "react-date-picker": "^10.2.0"
+  }
+}
