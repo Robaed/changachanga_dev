@@ -7,6 +7,11 @@ import { FORGOT_PASSWORD_ROUTE } from "~/config/routes";
 import { validatePassword, validatePhoneNumber } from "~/utils/validators";
 import { iamService } from "~/services/iam";
 
+import { useState } from 'react';
+
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
+
 type ActionData = {
   formError?: string;
   fieldsError?: {
@@ -47,38 +52,34 @@ export async function action({ request }: ActionArgs) {
 
 export default function LoginPage() {
   const actionData = useActionData<ActionData>();
+  const [value, setValue] = useState()
   return (
-    <AuthLayout title="Login">
-      <Form className="grid gap-3" method="post">
-        {actionData?.formError && (
-          <Alert variant="error">{actionData.formError}</Alert>
-        )}
-        <TextInput
-          required
-          label="Phone Number"
-          type="tel"
-          name="username"
-          id="username"
-          error={actionData?.fieldsError?.username}
-        />
-        <div className="text-right">
-          <Link
-            className="text-sm text-[#003D4C] font-medium"
-            to={FORGOT_PASSWORD_ROUTE}
-          >
-            Forgot Password?
-          </Link>
+    <AuthLayout title="">
+
+     <div style={{ marginTop : "30%", marginBottom : "30%" }} className="p-14 mt-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        
+        <div style={{ marginRight: "16%", marginLeft: "16%" }} className="content-center text-center">
+            <p style={{ fontSize: "22px;" }} className="font-semibold text-center text-xl">Welcome back! Please login to your account </p>
+            <p className="pt-5 text-sm font-light">We'll send an OTP to your registered phone number.</p>
         </div>
-        <TextInput
-          required
-          label="Password"
-          type="password"
-          name="password"
-          id="password"
-          error={actionData?.fieldsError?.password}
-        />
-        <Button type="submit">Login</Button>
-      </Form>
+        
+        <div>
+            <Form className="grid gap-3" method="post">
+                {actionData?.formError && (
+                <Alert variant="error">{actionData.formError}</Alert>
+                )}
+                <PhoneInput
+                label="Phone number"
+                className="mt-8"
+                placeholder="+254 (0722) 000-000"
+                value={value}
+                onChange={setValue}/>
+                <div className="flex justify-center mt-8">
+                    <Button type="submit">Continue</Button>
+                </div>
+            </Form>
+        </div>
+      </div>
     </AuthLayout>
   );
 }

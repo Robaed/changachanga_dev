@@ -28,3 +28,14 @@ input[type="text"], input[type="tel"], input[type="email"], input[type="password
     font-size: 12px!important;
     font-weight: 600;
 }
+
+#otp_inputs input {
+    width: 3em!important;
+    padding-left: 12px!important;
+    font-size: 16px!important;
+    margin: 6px;
+}
+
+#otp_inputs span {
+    display: none;
+}

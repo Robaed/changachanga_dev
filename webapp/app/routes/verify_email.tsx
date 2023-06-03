@@ -1,56 +1,31 @@
-import { Link } from "@remix-run/react";
-import { Card } from "~/components/core";
-import { MainLayout } from "~/components/layouts";
-import {
-  AccountVerificationBanner,
-  Channel,
-  UserBar,
-} from "~/components/sections";
-import { CHANNELS_ROUTE } from "~/config/routes";
+import { ArrowSmallRightIcon } from "@heroicons/react/24/solid";
+import { Alert, Button, Select, TextInput } from "~/components/core";
+import { AuthLayout } from "~/components/layouts";
 
 export default function EmailVerification() {
   return (
-    <MainLayout>
-      <div className="grid gap-3">
-        <UserBar />
-        <div className="grid grid-cols-2 gap-3 px-3">
-          
-          <Card>
-            <div className="grid grid-cols-3 divide-x">
-              <div className="px-1">
-                <p className="text-primary font-medium text-4xl">0</p>
-                <p className="text-[#767676] text-sm">Joined Channels</p>
-              </div>
-              <div className="px-1">
-                <p className="text-primary font-medium text-4xl">0</p>
-                <p className="text-[#767676] text-sm">Active Participation</p>
-              </div>
-              <div className="px-1">
-                <p className="text-primary font-medium text-4xl">0</p>
-                <p className="text-[#767676] text-sm">Declined Requests</p>
-              </div>
-            </div>
-          </Card>
+    <AuthLayout title="">
 
-          <Card>
-            <div className="grid gap-3">
-              <div className="flex justify-between items-center">
-                <p className="text-sm text-[#444444]">
-                  Your joined channels will appear here
-                </p>
-                <Link className="text-xs text-[#444444]" to={CHANNELS_ROUTE}>
-                  View All
-                </Link>
-              </div>
-              <div className="grid gap-3">
-                <Channel />
-                <Channel />
-                <Channel />
-              </div>
+        <div style={{ marginTop : "30%", marginBottom : "30%" }} className="p-14 mt-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+
+            <div style={{ marginRight: "20%", marginLeft: "20%" }} className="content-center text-center">
+                <p className="font-semibold text-center text-xl">Email Verification</p>
+                <p className="pt-5 text-sm font-light">We've sent you a verification email. Please check your inbox and follow the instructions to verify your email.</p>
+                <p className="pt-5 text-sm font-light">Haven't received the email? <a href="#0" style={{ color: "#71AE00" }}>Click here to resend</a></p>
             </div>
-          </Card>
+
+            <div className="flex mt-4 content-center justify-center">
+                <Button variant="outline" className="mr-4">Back</Button>
+
+                <Button type="submit">
+                    <span>Continue</span>
+                    <ArrowSmallRightIcon />
+                </Button>
+            </div>
+
+        
         </div>
-      </div>
-    </MainLayout>
+
+    </AuthLayout>
   );
 }
