@@ -251,7 +251,82 @@ export default function AccountVerification() {
                     </div>
                 </div>
             )}
-            {page === 4 && <pre>{JSON.stringify(data, null, 2)}</pre>}
+            {page === 4 && (
+                <div className="p-14 pt-4 mt-4">
+                    <div style={{ marginRight: "20%", marginLeft: "20%", marginTop: "12%" }} className="content-center text-center">
+                        <p className="font-semibold text-center text-xl">Let's get you verified</p>
+                        <p className="pt-5 text-sm font-light">Select your residency and follow the steps</p>
+                    </div>
+                <div>
+                    <Form className="grid gap-3" method="post">
+                        <div>
+                            {actionData?.formError && (
+                            <Alert variant="error">{actionData.formError}</Alert>
+                            )}
+                            
+                            <Select label='Residency' options={options} value={value} onChange={changeHandler} className='font-light text-sm'/>
+                        </div>
+                        <div className='mt-4'>
+                                    <TextInput
+                                    type='radio'
+                                    label='Upload image'
+                                    >
+                                    </TextInput>
+                                    <TextInput
+                                    type='radio'
+                                    label='Passport'
+                                    >
+                                    </TextInput>
+                        </div>
+
+                    </Form>
+                </div>
+            
+            </div>
+            )}
+            {page === 5 && (
+                <div className="p-14 pt-4 mt-4">
+                    <div style={{ marginRight: "20%", marginLeft: "20%", marginTop: "12%" }} className="content-center text-center">
+                        <p className="font-semibold text-center text-xl">Document verification</p>
+                        <p className="pt-5 text-sm font-light">Take pictures of both side of your government issued  ID Card.</p>
+                    </div>
+                <div>
+                    <Form className="grid gap-3" method="post">
+                        <div>
+                            {actionData?.formError && (
+                            <Alert variant="error">{actionData.formError}</Alert>
+                            )}
+                            
+                            {/* /<Select label='Residency' options={options} value={value} onChange={changeHandler} className='font-light text-sm'/> */}
+                        </div>
+                        <div className='mt-4'>
+                                    <TextInput
+                                        type='image'
+                                        label='Upload image'
+                                    >
+                                    </TextInput>
+                                    <ul>
+                                        <li>
+                                            Upload a complete image of your ID document.
+                                        </li>
+                                        <li>
+                                            Ensure all details are readable.
+                                        </li>
+                                        <li>
+                                            Ensure the document is the original & not expired.
+                                        </li>
+                                        <li>
+                                            Place documents against a solid-colured background.
+                                        </li>
+                                    </ul>
+                        </div>
+
+                    </Form>
+                </div>
+            
+            </div>
+            )}
+            {page === 6 && <pre>{JSON.stringify(data, null, 2)}</pre>}
             
             <div className="flex justify-center">
                 {page > 1 && (
@@ -264,7 +339,7 @@ export default function AccountVerification() {
                     Back
                 </button>
                 )}
-                {page < 4 && (
+                {page < 6 && (
                 <button
                     name="action"
                     value="next"
