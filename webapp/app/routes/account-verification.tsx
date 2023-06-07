@@ -99,10 +99,6 @@ export default function AccountVerification() {
             
             </div>
             <div className="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 pb-8">
-            <div style={{ marginRight: "20%", marginLeft: "20%", marginTop: "12%" }} className="content-center text-center">
-                <p className="font-semibold text-center text-xl">Let’s get you verified</p>
-                <p className="pt-5 text-sm font-light">Select your residency and follow the steps.</p>
-            </div>
             {page === 1 && (
                 <div className="p-14 pt-4 mt-4">
 
@@ -190,195 +186,64 @@ export default function AccountVerification() {
             </div>
             )}
             {page === 3 && (
-                <div className="divide-y divide-gray-200 pt-8 space-y-6 sm:pt-10 sm:space-y-5">
-                <div>
-                    <h3 className="text-lg leading-6 font-medium text-gray-900">
-                    Notifications
-                    </h3>
-                    <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                    We'll always let you know about important changes, but you
-                    pick what else you want to hear about.
-                    </p>
-                </div>
-                <div className="space-y-6 sm:space-y-5 divide-y divide-gray-200">
-                    <div className="pt-6 sm:pt-5">
-                    <div role="group" aria-labelledby="label-email">
-                        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-baseline">
-                        <div>
-                            <div
-                            className="text-base font-medium text-gray-900 sm:text-sm sm:text-gray-700"
-                            id="label-email"
-                            >
-                            By Email
-                            </div>
-                        </div>
-                        <div className="mt-4 sm:mt-0 sm:col-span-2">
-                            <div className="max-w-lg space-y-4">
-                            <div className="relative flex items-start">
-                                <div className="flex items-center h-5">
-                                <input
-                                    id="comments"
-                                    name="email"
-                                    value="comments"
-                                    defaultChecked={data.email?.includes(
-                                    'comments',
-                                    )}
-                                    type="checkbox"
-                                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                                />
-                                </div>
-                                <div className="ml-3 text-sm">
-                                <label
-                                    htmlFor="comments"
-                                    className="font-medium text-gray-700"
-                                >
-                                    Comments
-                                </label>
-                                <p className="text-gray-500">
-                                    Get notified when someones posts a comment on a
-                                    posting.
-                                </p>
-                                </div>
-                            </div>
+                
+                <div className="p-14 pt-4 mt-4">
+                    <div style={{ marginRight: "20%", marginLeft: "20%", marginTop: "12%" }} className="content-center text-center">
+                        <p className="font-semibold text-center text-xl">Residential Address</p>
+                        <p className="pt-5 text-sm font-light">Fill in your current Resdential Address.</p>
+                    </div>
+                    <div>
+                        <Form className="grid gap-3" method="post">
                             <div>
-                                <div className="relative flex items-start">
-                                <div className="flex items-center h-5">
-                                    <input
-                                    id="candidates"
-                                    name="email"
-                                    value="candidates"
-                                    defaultChecked={data.email?.includes(
-                                        'candidates',
-                                    )}
-                                    type="checkbox"
-                                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                                    />
-                                </div>
-                                <div className="ml-3 text-sm">
-                                    <label
-                                    htmlFor="candidates"
-                                    className="font-medium text-gray-700"
+                                {actionData?.formError && (
+                                <Alert variant="error">{actionData.formError}</Alert>
+                                )}
+                                
+                                {/* <Select label='Residential Address' options={options} value={value} onChange={changeHandler} className='font-light text-sm'/> */}
+                                <div className='mt-4'>
+                                    <TextInput
+                                        label="Residential Address"
+                                        placeholder="Street,Estate,House No/Door number"
                                     >
-                                    Candidates
-                                    </label>
-                                    <p className="text-gray-500">
-                                    Get notified when a candidate applies for a
-                                    job.
-                                    </p>
+                                    </TextInput>
                                 </div>
-                                </div>
+                                
                             </div>
-                            <div>
-                                <div className="relative flex items-start">
-                                <div className="flex items-center h-5">
-                                    <input
-                                    id="offers"
-                                    name="email"
-                                    value="offers"
-                                    defaultChecked={data.email?.includes(
-                                        'offers',
-                                    )}
-                                    type="checkbox"
-                                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                                    />
-                                </div>
-                                <div className="ml-3 text-sm">
-                                    <label
-                                    htmlFor="offers"
-                                    className="font-medium text-gray-700"
-                                    >
-                                    Offers
-                                    </label>
-                                    <p className="text-gray-500">
-                                    Get notified when a candidate accepts or
-                                    rejects an offer.
-                                    </p>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                    <div className="pt-6 sm:pt-5">
-                    <div role="group" aria-labelledby="label-notifications">
-                        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-baseline">
-                        <div>
-                            <div
-                            className="text-base font-medium text-gray-900 sm:text-sm sm:text-gray-700"
-                            id="label-notifications"
-                            >
-                            Push Notifications
-                            </div>
-                        </div>
-                        <div className="sm:col-span-2">
-                            <div className="max-w-lg">
-                            <p className="text-sm text-gray-500">
-                                These are delivered via SMS to your mobile phone.
-                            </p>
-                            <div className="mt-4 space-y-4">
-                                <div className="flex items-center">
-                                <input
-                                    id="push-everything"
-                                    name="pushNotifications"
-                                    value="everything"
-                                    defaultChecked={
-                                    data.pushNotifications === 'everything'
-                                    }
-                                    type="radio"
-                                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                                />
-                                <label
-                                    htmlFor="push-everything"
-                                    className="ml-3 block text-sm font-medium text-gray-700"
+                            
+                            <div className='mt-4'>
+                                <TextInput 
+                                    type='text' 
+                                    label='Postal Address'
+                                    placeholder='Postal Adress'
+                                >                                    
+                                </TextInput>
+
+                                <TextInput 
+                                    type='text'
+                                    label="Postal code"
+                                    placeholder='Postal Code'   
+                                >   
+                                </TextInput>
+
+                                <TextInput 
+                                    type='text'
+                                    label="City"
+                                    placeholder='City'   
                                 >
-                                    Everything
-                                </label>
-                                </div>
-                                <div className="flex items-center">
-                                <input
-                                    id="push-email"
-                                    name="pushNotifications"
-                                    value="email"
-                                    defaultChecked={
-                                    data.pushNotifications === 'email'
-                                    }
-                                    type="radio"
-                                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                                />
-                                <label
-                                    htmlFor="push-email"
-                                    className="ml-3 block text-sm font-medium text-gray-700"
-                                >
-                                    Same as email
-                                </label>
-                                </div>
-                                <div className="flex items-center">
-                                <input
-                                    id="push-nothing"
-                                    name="pushNotifications"
-                                    value="none"
-                                    defaultChecked={
-                                    data.pushNotifications === 'none'
-                                    }
-                                    type="radio"
-                                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                                />
-                                <label
-                                    htmlFor="push-nothing"
-                                    className="ml-3 block text-sm font-medium text-gray-700"
-                                >
-                                    No push notifications
-                                </label>
-                                </div>
+                                </TextInput>
                             </div>
+
+                            <div className='mt-1'>
+                                <TextInput 
+                                    type='text' 
+                                    label='Country/Region'
+                                    placeholder='Country/Region'
+                                >   
+                                </TextInput>
                             </div>
-                        </div>
-                        </div>
+                            <p className="h-0.5">Address must include all information (including any house Number/apartment number)</p>
+                        </Form>
                     </div>
-                    </div>
-                </div>
                 </div>
             )}
             {page === 4 && <pre>{JSON.stringify(data, null, 2)}</pre>}
