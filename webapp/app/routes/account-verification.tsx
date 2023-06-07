@@ -99,20 +99,22 @@ export default function AccountVerification() {
             
             </div>
             <div className="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 pb-8">
-            <div style={{ marginRight: "20%", marginLeft: "20%", marginTop: "12%" }} className="content-center text-center">
-                <p className="font-semibold text-center text-xl">Let’s get you verified</p>
-                <p className="pt-5 text-sm font-light">Select your residency and follow the steps.</p>
-            </div>
+            
             {page === 1 && (
                 <div className="p-14 pt-4 mt-4">
 
                 <div>
+                <div style={{ marginRight: "20%", marginLeft: "20%", marginTop: "12%" }} className="content-center text-center">
+                    <p className="font-semibold text-center text-xl">Let’s get you verified</p>
+                    <p className="pt-5 text-sm font-light">Select your residency and follow the steps.</p>
+                </div>
+
                     <Form className="grid gap-3" method="post">
                         <div>
                             {actionData?.formError && (
                             <Alert variant="error">{actionData.formError}</Alert>
                             )}
-                            
+                                                                                                                                                                                                                                                                                                                                                                                         
                             <Select label='Residency' options={options} value={value} onChange={changeHandler} className='font-light text-sm'/>
                         </div>
                         <div>
