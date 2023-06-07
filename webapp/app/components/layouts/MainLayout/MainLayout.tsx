@@ -7,12 +7,22 @@ type Props = {
 };
 export default function MainLayout({ children }: Props) {
   return (
-    <div className="">
+    <div className="w-full h-screen overflow-none">
       <TopAppBar />
-      <div>
-        <main className="">
-          {children}
-        </main>
+      <div className="bg-secondary"></div>
+      <div className="p-12 flex justify-center align-center">
+        <div className="flex gap-12 ">
+          {/* <div>
+            <img
+              src={Logo}
+              alt="Changachanga logo"
+              className="object-contain"
+            />
+          </div> */}
+          <div className="flex flex-col gap-6">
+            {children}
+          </div>
+        </div>
       </div>
       <FooterAppBar />
     </div>
