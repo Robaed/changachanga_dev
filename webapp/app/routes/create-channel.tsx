@@ -5,9 +5,10 @@ import { Alert, Button, Select, TextInput } from "~/components/core";
 import { getSession, commitSession } from '~/session.server'
 import qs from 'qs'
 
-import { AuthLayout } from "~/components/layouts";
+import { MainLayout } from "~/components/layouts";
 
 import DatePicker from 'react-date-picker';
+
 
 import countryList from 'react-select-country-list';
 // import { useSpinDelay } from 'spin-delay'
@@ -81,14 +82,19 @@ export default function AccountVerification() {
   }
   const options = useMemo(() => countryList().getData(), [])
 
-  const gender_options = [
-    { value: 'male', label: 'Male' },
-    { value: 'female', label: 'Female' }
+  const channel_privacy_options = [
+    { value: 'public', label: 'Public' },
+    { value: 'private', label: 'Private' }
+  ]
+
+  const channel_category_options = [
+    { value: 'public', label: 'Public' },
+    { value: 'private', label: 'Private' }
   ]
 
 
   return (
-    <AuthLayout title=''>
+    <MainLayout>
         <div className="container">
         <Form method="post" className="space-y-8 divide-y divide-gray-200">
             <input name="page" type="hidden" value={page} />
@@ -104,8 +110,8 @@ export default function AccountVerification() {
 
                 <div>
                 <div style={{ marginRight: "20%", marginLeft: "20%", marginTop: "12%" }} className="content-center text-center">
-                    <p className="font-semibold text-center text-xl">Let’s get you verified</p>
-                    <p className="pt-5 text-sm font-light">Select your residency and follow the steps.</p>
+                    <p className="font-semibold text-center text-xl">Create Your Channel</p>
+                    <p className="pt-5 text-sm font-light">Follow the steps to create your channel.</p>
                 </div>
 
                     <Form className="grid gap-3" method="post">
@@ -114,21 +120,38 @@ export default function AccountVerification() {
                             <Alert variant="error">{actionData.formError}</Alert>
                             )}
                                                                                                                                                                                                                                                                                                                                                                                          
-                            <Select label='Residency' options={options} value={value} onChange={changeHandler} className='font-light text-sm'/>
+                            <TextInput 
+                                type='text' 
+                                label='Channel title'
+                                placeholder='Your channel title'
+                            >
+                            </TextInput>
+
                         </div>
                         <div>
-                            <p className='font-light pt-4 text-xs'>Complete the following steps to verify your account in 7 minutes</p>
-                        </div>
-                        
-                        <div className='flex mt-4'>
-                            <img className='mr-4' src={PersonalInfoIcon}/>
-                            <span className='text-sm'>Personal Information</span>
+                            <Select id='channel_privacy_select' label='Privacy' options={channel_privacy_options}/>
                         </div>
 
-                        <div className='flex'>
-                            <img className='mr-4' src={govermentIdIcon}/>
-                            <span className='text-sm'>Government-Issued ID</span>
+                        <div>
+                            <textarea>
+
+                            </textarea>
                         </div>
+
+                        <div>
+                            <Select id='channel_category_options' label='Category' options={channel_category_options}/>
+                        </div>
+                        
+                        <div>
+                            <TextInput 
+                                type="number" 
+                                label='Target'
+                                placeholder='KES. 100,000.00'
+                            >
+                            </TextInput>
+
+                        </div>
+                    
 
                     </Form>
                 </div>
@@ -389,18 +412,10 @@ export default function AccountVerification() {
                         </div>
                         <div className='flex'>
                             <div className='mt-4 w-1/2'>
-                                <TextInput
-                                label='Front side of document'
-                                type="file">
-
-                            </TextInput>
+                                <p>Front side of ID</p>
                             </div>
                             <div className='mt-4 w-1/2'>
-                                <TextInput
-                                type="file"
-                                label='Backside of document'>
-
-                                </TextInput>                      
+                                <p>Backside of ID</p>                                
                             </div>
                         </div>
 
@@ -438,7 +453,7 @@ export default function AccountVerification() {
             
         </Form>
         </div>
-    </AuthLayout>
+    </MainLayout>
   )
 }
 

@@ -39,3 +39,7 @@ input[type="text"], input[type="tel"], input[type="email"], input[type="password
 #otp_inputs span {
     display: none;
 }
+
+#gender_select, #residency, #address_disclaimer {
+    font-size: 12px;
+}

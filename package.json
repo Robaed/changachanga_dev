@@ -1,5 +1,6 @@
 {
   "devDependencies": {
-    "react-date-picker": "^10.2.0"
+    "react-date-picker": "^10.2.0",
+    "react-radio-buttons": "^1.2.2"
   }
 }
